@@ -1,0 +1,11 @@
+import { UrlBuilder } from '../urlBuilder';
+
+describe('UrlBuilder', () => {
+  test('build-values', () => {
+    expect(UrlBuilder.build('/path?p1=[v1]', { v1: undefined })).toBe('/path?p1=');
+  });
+
+  test('build-params', () => {
+    expect(UrlBuilder.build('/path?p1=[v1]&p2=[v2]&p3=[v3]', { v1: 'pv1' })).toBe('/path?p1=pv1&p2=&p3=');
+  });
+});

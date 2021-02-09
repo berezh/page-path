@@ -1,0 +1,22 @@
+import { AppRoute } from '../appRoute';
+
+describe('AppRoute', () => {
+  test('query', () => {
+    const route = new AppRoute('/path', ['first', 'second'], ['page', 'mode']);
+    const url = route.url({
+      first: 'one',
+      second: 'two',
+      page: 1,
+      mode: 'view',
+    });
+    expect(url).toBe('/path/one/two?mode=view&page=1');
+  });
+
+  // new AppRoute('/')
+
+  test('root', () => {
+    const route = new AppRoute('/');
+    const url = route.url({});
+    expect(url).toBe('/');
+  });
+});
