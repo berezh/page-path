@@ -18,11 +18,11 @@ npm install page-path
 
 `PagePath` class constructor receives `string` or `PagePathOptions` interface. `string` type represents `root` value.
 
-| Name    | Required | Type                        | Description          |
-| ------- | -------- | --------------------------- | -------------------- |
-| `root`  | Yes      | `string`                    | Root path            |
-| `path`  | No       | `string` or `Array<string>` | Subdirectories names |
-| `query` | No       | `string` or `Array<string>` | Queries names        |
+| Name    | Required | Type                        | Description          | Example                                                 |
+| ------- | -------- | --------------------------- | -------------------- | ------------------------------------------------------- |
+| `root`  | Yes      | `string`                    | Root path            | `/`root`/path1/path2?query1=value1&query2=value2`       |
+| `path`  | No       | `string` or `Array<string>` | Subdirectories names | `/root/`path1`/`path2`?query1=value1&query2=value2`     |
+| `query` | No       | `string` or `Array<string>` | Queries names        | `/root/path1/path2?`query1`=`value1`&`query2`=`value2`` |
 
 ### PagePath
 
@@ -50,7 +50,7 @@ const bookPagePath = new PagePath<BookPath>({
 });
 
 // build path
-const path = bookPagePath.url({ name: 'alphabet', page: 7 });
+const path = bookPagePath.build({ name: 'alphabet', page: 7 });
 // path: "/book/alphabet?page=7"
 ```
 
@@ -121,11 +121,11 @@ import { Switch, Route } from 'react-router-dom';
 Define achors
 
 ```tsx
-<a href={AppPaths.index.url()}>Home</a>
+<a href={AppPaths.index.build()}>Home</a>
 // => <a href="/">Home</a>
-<a href={AppPaths.contact.url()}>Contact</a>
+<a href={AppPaths.contact.build()}>Contact</a>
 // => <a href="/contact">Contact</a>
-<a href={AppPaths.book.url({ name: 'alphabet' })}>Alphabet</a>
+<a href={AppPaths.book.build({ name: 'alphabet' })}>Alphabet</a>
 // => <a href="/book/alphabet">Alphabet</a>
 ```
 
@@ -157,8 +157,8 @@ export const AppPaths = {
 Define achors
 
 ```tsx
-<a href={AppPaths.book.url({ name: 'alphabet', page: 1 })}>Alphabet</a>
+<a href={AppPaths.book.build({ name: 'alphabet', page: 1 })}>Alphabet</a>
 // => <a href="/book/alphabet?page=1">Alphabet</a>
-<a href={AppPaths.book.url({ name: 'geography', page: 2 })}>Geography</a>
+<a href={AppPaths.book.build({ name: 'geography', page: 2 })}>Geography</a>
 // => <a href="/book/geography?page=2">Geography</a>
 ```
