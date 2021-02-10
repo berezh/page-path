@@ -18,11 +18,11 @@ npm install page-path
 
 `PagePath` class constructor receives `string` or `PagePathOptions` interface. `string` type represents `root` value.
 
-| Name    | Required | Type                        | Description          | Example                                                 |
-| ------- | -------- | --------------------------- | -------------------- | ------------------------------------------------------- |
-| `root`  | Yes      | `string`                    | Root path            | `/`root`/path1/path2?query1=value1&query2=value2`       |
-| `path`  | No       | `string` or `Array<string>` | Subdirectories names | `/root/`path1`/`path2`?query1=value1&query2=value2`     |
-| `query` | No       | `string` or `Array<string>` | Queries names        | `/root/path1/path2?`query1`=`value1`&`query2`=`value2`` |
+| Name    | Required | Type                        | Description          | Example                 |
+| ------- | -------- | --------------------------- | -------------------- | ----------------------- |
+| `root`  | Yes      | `string`                    | Root path            | /`book`/alphabet?page=7 |
+| `path`  | No       | `string` or `Array<string>` | Subdirectories names | /book/`alphabet`?page=7 |
+| `query` | No       | `string` or `Array<string>` | Queries names        | /book/alphabet?`page`=7 |
 
 ### PagePath
 
