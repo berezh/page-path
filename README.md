@@ -16,17 +16,17 @@ npm install page-path
 
 ### PagePathOptions
 
-`PagePath` class constructor receives `string` or `PagePathOptions` interface. `string` type represents `path` value.
+`PagePath` class constructor receives `string` or `PagePathOptions` interface. `string` type represents `root` value.
 
-| Name          | Required | Type                        | Description          |
-| ------------- | -------- | --------------------------- | -------------------- |
-| `path`        | Yes      | `string`                    | Root path            |
-| `pathParams`  | No       | `string` or `Array<string>` | Subdirectories names |
-| `queryParams` | No       | `string` or `Array<string>` | Queries names        |
+| Name    | Required | Type                        | Description          |
+| ------- | -------- | --------------------------- | -------------------- |
+| `root`  | Yes      | `string`                    | Root path            |
+| `path`  | No       | `string` or `Array<string>` | Subdirectories names |
+| `query` | No       | `string` or `Array<string>` | Queries names        |
 
-## Using with `react-router-dom`
+## Using in `react-router-dom`
 
-### Define interface
+Define interface
 
 ```tsx
 export interface BookPath {
@@ -34,7 +34,7 @@ export interface BookPath {
 }
 ```
 
-### Define container
+Define container
 
 ```tsx
 import { PagePath } from 'page-path';
@@ -46,7 +46,7 @@ export const AppPaths = {
 };
 ```
 
-### Define routes
+Define routes
 
 ```tsx
 import { Switch, Route } from 'react-router-dom';
@@ -71,10 +71,47 @@ import { Switch, Route } from 'react-router-dom';
 </Switch>
 ```
 
-### Define achor
+Define achors
 
 ```tsx
-<a href={AppPaths.index.url()}>Home</a> // => <a href="/">Home</a>
-<a href={AppPaths.contact.url()}>Contact</a> // => <a href="/contact">Contact</a>
-<a href={AppPaths.book.url({ name: 'alphabet' })}>Alphabet</a> // => <a href="/book/alphabet">Alphabet</a>
+<a href={AppPaths.index.url()}>Home</a>
+// => <a href="/">Home</a>
+<a href={AppPaths.contact.url()}>Contact</a>
+// => <a href="/contact">Contact</a>
+<a href={AppPaths.book.url({ name: 'alphabet' })}>Alphabet</a>
+// => <a href="/book/alphabet">Alphabet</a>
+```
+
+## Using in `next` or `gatsby`
+
+Define interface
+
+```tsx
+export interface BookPath {
+    name: string;
+    page?: number;
+}
+```
+
+Define container
+
+```tsx
+import { PagePath } from 'page-path';
+
+export const AppPaths = {
+    book: new PagePath<BookPath>({
+        root: '/book/',
+        path: ['name'],
+        query: ['page'],
+    }),
+};
+```
+
+Define achors
+
+```tsx
+<a href={AppPaths.book.url({ name: 'alphabet', page: 1 })}>Alphabet</a>
+// => <a href="/book/alphabet?page=1">Alphabet</a>
+<a href={AppPaths.book.url({ name: 'geography', page: 2 })}>Geography</a>
+// => <a href="/book/geography?page=2">Geography</a>
 ```

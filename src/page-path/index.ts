@@ -14,9 +14,9 @@ export class PagePath<TParams = { [key: string]: string | number }> {
         if (typeof options === 'string') {
             innerPath = options;
         } else {
-            innerPath = options.path;
+            innerPath = options.root;
 
-            const { pathParams, queryParams } = options;
+            const { path: pathParams, query: queryParams } = options;
             if (typeof pathParams === 'string') {
                 this.pathParams.push(pathParams);
             } else if (Array.isArray(pathParams)) {

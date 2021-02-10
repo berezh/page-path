@@ -7,9 +7,9 @@ interface BookPath {
 describe('AppRoute', () => {
     test('default', () => {
         const route = new PagePath({
-            path: '/path',
-            pathParams: ['first', 'second'],
-            queryParams: ['page', 'mode'],
+            root: '/path',
+            path: ['first', 'second'],
+            query: ['page', 'mode'],
         });
         const url = route.url({
             first: 'one',
