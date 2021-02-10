@@ -1,7 +1,6 @@
 module.exports = {
     parser: '@typescript-eslint/parser',
     extends: [
-        'plugin:react/recommended',
         'plugin:@typescript-eslint/recommended',
         'prettier/@typescript-eslint',
         'plugin:prettier/recommended',
@@ -21,12 +20,7 @@ module.exports = {
         ],
         '@typescript-eslint/no-explicit-any': 0,
         '@typescript-eslint/explicit-function-return-type': 0,
-        'react/prop-types': 0,
         'max-len': ['error', { code: 120, tabWidth: 4 }],
     },
-    settings: {
-        react: {
-            version: 'detect',
-        },
-    },
+    settings: {},
 };
