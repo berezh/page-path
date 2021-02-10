@@ -26,10 +26,10 @@ npm install page-path
 
 ### PagePath
 
-#### url(urlParams: any): string
+#### build(params: any): string
 
 Parameters:
-`urlParams` - URL's params passed to url builder.
+`params` - URL's params passed to url builder.
 
 Returns built URL based on passed parameters.
 

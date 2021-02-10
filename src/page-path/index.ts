@@ -38,7 +38,7 @@ export class PagePath<TParams = { [key: string]: string | number }> {
         }
     }
 
-    public url(params?: TParams): string {
+    public build(params?: TParams): string {
         let { rootPath } = this;
         if (params) {
             for (let i = 0; i < this.path.length; i++) {
@@ -80,7 +80,7 @@ export class PagePath<TParams = { [key: string]: string | number }> {
     public isActive<TParams>(params: TParams, path: string): boolean;
     public isActive(p1: any, p2?: any): boolean {
         if (p2) {
-            return this.url(p1) === p2;
+            return this.build(p1) === p2;
         } else {
             return this.rootPath === p1;
         }

@@ -11,7 +11,7 @@ describe('AppRoute', () => {
             path: ['first', 'second'],
             query: ['page', 'mode'],
         });
-        const url = route.url({
+        const url = route.build({
             first: 'one',
             second: 'two',
             page: 1,
@@ -22,12 +22,12 @@ describe('AppRoute', () => {
 
     test('root', () => {
         const route = new PagePath('/');
-        const url = route.url({});
+        const url = route.build({});
         expect(url).toBe('/');
     });
 
     test('book', () => {
         const route = new PagePath<BookPath>('/book/:name');
-        expect(route.url({ name: 'alfabet' })).toBe('/book/alfabet');
+        expect(route.build({ name: 'alfabet' })).toBe('/book/alfabet');
     });
 });
