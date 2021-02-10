@@ -4,71 +4,76 @@ import { UrlBuilder } from '../url-builder';
 import { PagePathOptions } from './interfaces';
 
 export class PagePath<TParams = { [key: string]: string | number }> {
-    public readonly path: string = '';
-    public readonly pathParams: string[] = [];
-    public readonly queryParams: string[] = [];
+    private readonly rootPath: string = '';
+    private readonly path: string[] = [];
+    private readonly query: string[] = [];
 
     constructor(options: string | PagePathOptions) {
-        let innerPath = '';
+        let innerRoot = '';
 
         if (typeof options === 'string') {
-            innerPath = options;
+            innerRoot = options;
         } else {
-            innerPath = options.root;
+            innerRoot = options.root;
 
-            const { path: pathParams, query: queryParams } = options;
-            if (typeof pathParams === 'string') {
-                this.pathParams.push(pathParams);
-            } else if (Array.isArray(pathParams)) {
-                this.pathParams = [...pathParams];
+            const { path, query } = options;
+            if (typeof path === 'string') {
+                this.path.push(path);
+            } else if (Array.isArray(path)) {
+                this.path = [...path];
             }
-            if (typeof queryParams === 'string') {
-                this.queryParams.push(queryParams);
-            } else if (Array.isArray(queryParams)) {
-                this.queryParams = [...queryParams];
+            if (typeof query === 'string') {
+                this.query.push(query);
+            } else if (Array.isArray(query)) {
+                this.query = [...query];
             }
         }
 
-        if (innerPath) {
-            if (innerPath.length > 1) {
-                this.path = innerPath.replace(/\/$/gi, '');
+        if (innerRoot) {
+            if (innerRoot.length > 1) {
+                this.rootPath = innerRoot.replace(/\/$/gi, '');
             } else {
-                this.path = innerPath;
+                this.rootPath = innerRoot;
             }
         }
     }
 
     public url(params?: TParams): string {
-        let { path } = this;
+        let { rootPath } = this;
         if (params) {
-            for (let i = 0; i < this.pathParams.length; i++) {
-                const pathKey = this.pathParams[i];
+            for (let i = 0; i < this.path.length; i++) {
+                const pathKey = this.path[i];
                 const pathValue = (params as any)[pathKey];
                 if (pathValue) {
-                    path += `/${pathValue}`;
+                    rootPath += `/${pathValue}`;
                 } else {
                     break;
                 }
             }
+
             const query: { [key: string]: string } = {};
-            if (this.queryParams.length) {
-                for (let i = 0; i < this.queryParams.length; i++) {
-                    const queryKey = this.queryParams[i];
+            if (this.query.length) {
+                for (let i = 0; i < this.query.length; i++) {
+                    const queryKey = this.query[i];
                     query[queryKey] = (params as any)[queryKey];
                 }
             }
 
-            if (this.pathParams.length || this.queryParams.length) {
+            if (this.path.length || this.query.length) {
                 return stringifyUrl(
-                    { url: path, query },
+                    { url: rootPath, query },
                     { skipNull: true, skipEmptyString: true },
                 );
             } else {
-                return UrlBuilder.build(path, params);
+                return UrlBuilder.build(rootPath, params);
             }
         }
 
-        return path;
+        return rootPath;
+    }
+
+    public get root(): string {
+        return this.rootPath;
     }
 
     public isActive(path: string): boolean;
@@ -77,7 +82,7 @@ export class PagePath<TParams = { [key: string]: string | number }> {
         if (p2) {
             return this.url(p1) === p2;
         } else {
-            return this.path === p1;
+            return this.rootPath === p1;
         }
     }
 }

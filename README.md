@@ -24,6 +24,53 @@ npm install page-path
 | `path`  | No       | `string` or `Array<string>` | Subdirectories names |
 | `query` | No       | `string` or `Array<string>` | Queries names        |
 
+### PagePath
+
+#### url(urlParams: any): string
+
+Parameters:
+`urlParams` - URL's params passed to url builder.
+
+Returns built URL based on passed parameters.
+
+Example:
+
+```tsx
+// interface
+interface BookPath {
+    name: string;
+    page?: number;
+}
+
+// page path
+const bookPagePath = new PagePath<BookPath>({
+    root: '/book',
+    path: ['name'],
+    query: ['page'],
+});
+
+// build path
+const path = bookPagePath.url({ name: 'alphabet', page: 7 });
+// path: "/book/alphabet?page=7"
+```
+
+### root
+
+Returns `root` path.
+
+Example:
+
+```tsx
+// page path
+const bookPagePath = new PagePath({
+    root: '/book/:name',
+});
+
+// build path
+const root = bookPagePath.root;
+// path: "/book/:name"
+```
+
 ## Using in `react-router-dom`
 
 Define interface
@@ -54,17 +101,17 @@ import { Switch, Route } from 'react-router-dom';
 <Switch>
     <Route
         exact={true}
-        path={AppPaths.index.path}
+        path={AppPaths.index.root}
         component={IndexPage}
     />
     <Route
         exact={true}
-        path={AppPaths.contact.path}
+        path={AppPaths.contact.root}
         component={ContactPage}
     />
     <Route
         exact={true}
-        path={AppPaths.book.path}
+        path={AppPaths.book.root}
         component={BookPage}
     />
     ...
