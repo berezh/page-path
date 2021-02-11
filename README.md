@@ -20,9 +20,9 @@ npm install page-path
 
 | Name    | Required | Type                        | Description          | Example                 |
 | ------- | -------- | --------------------------- | -------------------- | ----------------------- |
-| `root`  | Yes      | `string`                    | Root path            | /`book`/alphabet?page=7 |
-| `path`  | No       | `string` or `Array<string>` | Subdirectories names | /book/`alphabet`?page=7 |
-| `query` | No       | `string` or `Array<string>` | Queries names        | /book/alphabet?`page`=7 |
+| `root`  | Yes      | `string`                    | Root path            | /**book**/alphabet?page=7 |
+| `path`  | No       | `string` or `Array<string>` | Subdirectories names | /book/**alphabet**?page=7 |
+| `query` | No       | `string` or `Array<string>` | Queries names        | /book/alphabet?**page**=7 |
 
 ### PagePath
 
