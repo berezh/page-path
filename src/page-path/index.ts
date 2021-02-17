@@ -7,26 +7,27 @@ export class PagePath<TParams = { [key: string]: string | number }> {
     private readonly rootPath: string = '';
     private readonly path: string[] = [];
     private readonly query: string[] = [];
+    private readonly ending: string | undefined = undefined;
 
     constructor(options: string | PagePathOptions) {
-        let innerRoot = '';
+        const innerOptions: PagePathOptions =
+            typeof options === 'string' ? { root: options } : options;
 
-        if (typeof options === 'string') {
-            innerRoot = options;
-        } else {
-            innerRoot = options.root;
+        const { root: innerRoot } = innerOptions;
 
-            const { path, query } = options;
-            if (typeof path === 'string') {
-                this.path.push(path);
-            } else if (Array.isArray(path)) {
-                this.path = [...path];
-            }
-            if (typeof query === 'string') {
-                this.query.push(query);
-            } else if (Array.isArray(query)) {
-                this.query = [...query];
-            }
+        const { path, query, ending } = innerOptions;
+
+        this.ending = ending;
+
+        if (typeof path === 'string') {
+            this.path.push(path);
+        } else if (Array.isArray(path)) {
+            this.path = [...path];
+        }
+        if (typeof query === 'string') {
+            this.query.push(query);
+        } else if (Array.isArray(query)) {
+            this.query = [...query];
         }
 
         if (innerRoot) {
@@ -51,6 +52,10 @@ export class PagePath<TParams = { [key: string]: string | number }> {
                 }
             }
 
+            if (this.ending) {
+                rootPath = `${rootPath}${this.ending}`;
+            }
+
             const query: { [key: string]: string } = {};
             if (this.query.length) {
                 for (let i = 0; i < this.query.length; i++) {
@@ -59,14 +64,17 @@ export class PagePath<TParams = { [key: string]: string | number }> {
                 }
             }
 
-            if (this.path.length || this.query.length) {
-                return stringifyUrl(
+            let resultUrl = rootPath;
+
+            if (this.query.length) {
+                resultUrl = stringifyUrl(
                     { url: rootPath, query },
                     { skipNull: true, skipEmptyString: true },
                 );
-            } else {
-                return UrlBuilder.build(rootPath, params);
             }
+
+            // todo: check if has params to replace, if not - skip
+            return UrlBuilder.build(resultUrl, params);
         }
 
         return rootPath;

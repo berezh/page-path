@@ -2,6 +2,7 @@ import { PagePath } from '..';
 
 interface BookPath {
     name: string;
+    page?: number;
 }
 
 describe('AppRoute', () => {
@@ -29,5 +30,16 @@ describe('AppRoute', () => {
     test('book', () => {
         const route = new PagePath<BookPath>('/book/:name');
         expect(route.build({ name: 'alfabet' })).toBe('/book/alfabet');
+    });
+
+    test('book - ending', () => {
+        const route = new PagePath<BookPath>({
+            root: '/book/:name',
+            query: 'page',
+            ending: '.html',
+        });
+        expect(route.build({ name: 'alfabet', page: 10 })).toBe(
+            '/book/alfabet.html?page=10',
+        );
     });
 });

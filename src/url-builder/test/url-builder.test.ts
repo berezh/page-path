@@ -13,9 +13,15 @@ describe('UrlBuilder', () => {
         ).toBe('/path?p1=pv1&p2=&p3=');
     });
 
-    test('Points', () => {
+    test('book', () => {
         expect(UrlBuilder.build('/book/:name', { name: 'my-book' })).toBe(
             '/book/my-book',
         );
+    });
+
+    test('book', () => {
+        expect(
+            UrlBuilder.build('/book/:name.html?page=10', { name: 'my-book' }),
+        ).toBe('/book/my-book.html?page=10');
     });
 });
