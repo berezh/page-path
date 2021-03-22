@@ -1,4 +1,3 @@
 {
-    "jestrunner.configPath": "jest.config.js",
-    "jestrunner.runOptions": ["--maxWorkers \"1\""]
+    "jestrunner.configPath": "jest.config.js"
 }

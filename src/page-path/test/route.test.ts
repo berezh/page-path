@@ -34,6 +34,14 @@ describe('AppRoute', () => {
 
     test('book - ending', () => {
         const route = new PagePath<BookPath>({
+            root: '/book',
+            ending: '.html',
+        });
+        expect(route.build()).toBe('/book.html');
+    });
+
+    test('book: ending + query', () => {
+        const route = new PagePath<BookPath>({
             root: '/book/:name',
             query: 'page',
             ending: '.html',

@@ -1,6 +1,6 @@
 {
     "name": "page-path",
-    "version": "0.0.10",
+    "version": "0.0.12",
     "description": "Path builder",
     "main": "dist/index.js",
     "module": "dist/index.esm.js",

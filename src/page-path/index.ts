@@ -51,11 +51,13 @@ export class PagePath<TParams = { [key: string]: string | number }> {
                     break;
                 }
             }
+        }
 
-            if (this.ending) {
-                rootPath = `${rootPath}${this.ending}`;
-            }
+        if (this.ending) {
+            rootPath = `${rootPath}${this.ending}`;
+        }
 
+        if (params) {
             const query: { [key: string]: string } = {};
             if (this.query.length) {
                 for (let i = 0; i < this.query.length; i++) {
