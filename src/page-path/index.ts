@@ -4,7 +4,7 @@ import { UrlBuilder } from '../url-builder';
 import { PagePathOptions } from './interfaces';
 
 export class PagePath<TParams = { [key: string]: string | number }> {
-    private readonly rootPath: string = '';
+    private readonly root: string = '';
     private readonly path: string[] = [];
     private readonly query: string[] = [];
     private readonly ending: string | undefined = undefined;
@@ -32,21 +32,22 @@ export class PagePath<TParams = { [key: string]: string | number }> {
 
         if (innerRoot) {
             if (innerRoot.length > 1) {
-                this.rootPath = innerRoot.replace(/\/$/gi, '');
+                this.root = innerRoot.replace(/\/$/gi, '');
             } else {
-                this.rootPath = innerRoot;
+                this.root = innerRoot;
             }
         }
     }
 
     public build(params?: TParams): string {
-        let { rootPath } = this;
+        let resultUrl = `${this.root}`;
+
         if (params) {
             for (let i = 0; i < this.path.length; i++) {
                 const pathKey = this.path[i];
                 const pathValue = (params as any)[pathKey];
                 if (pathValue) {
-                    rootPath += `/${pathValue}`;
+                    resultUrl += `/${pathValue}`;
                 } else {
                     break;
                 }
@@ -54,7 +55,7 @@ export class PagePath<TParams = { [key: string]: string | number }> {
         }
 
         if (this.ending) {
-            rootPath = `${rootPath}${this.ending}`;
+            resultUrl = `${resultUrl}${this.ending}`;
         }
 
         if (params) {
@@ -66,11 +67,9 @@ export class PagePath<TParams = { [key: string]: string | number }> {
                 }
             }
 
-            let resultUrl = rootPath;
-
             if (this.query.length) {
                 resultUrl = stringifyUrl(
-                    { url: rootPath, query },
+                    { url: resultUrl, query },
                     { skipNull: true, skipEmptyString: true },
                 );
             }
@@ -79,11 +78,7 @@ export class PagePath<TParams = { [key: string]: string | number }> {
             return UrlBuilder.build(resultUrl, params);
         }
 
-        return rootPath;
-    }
-
-    public get root(): string {
-        return this.rootPath;
+        return resultUrl;
     }
 
     public isActive(path: string): boolean;
@@ -92,7 +87,11 @@ export class PagePath<TParams = { [key: string]: string | number }> {
         if (p2) {
             return this.build(p1) === p2;
         } else {
-            return this.rootPath === p1;
+            return this.fullRoot === p1;
         }
+    }
+
+    private get fullRoot() {
+        return this.ending ? `${this.root}${this.ending}` : this.root;
     }
 }

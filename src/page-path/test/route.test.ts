@@ -50,4 +50,21 @@ describe('AppRoute', () => {
             '/book/alfabet.html?page=10',
         );
     });
+
+    test('book: isActive', () => {
+        const route = new PagePath<BookPath>({
+            root: '/book',
+        });
+        expect(route.isActive('/book')).toBe(true);
+        expect(route.isActive('/book1')).toBe(false);
+    });
+
+    test('book: ending + isActive', () => {
+        const route = new PagePath<BookPath>({
+            root: '/book',
+            ending: '.html',
+        });
+        expect(route.isActive('/book.html')).toBe(true);
+        expect(route.isActive('/book')).toBe(false);
+    });
 });
