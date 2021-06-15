@@ -1,4 +1,4 @@
-import { stringifyUrl } from 'query-string';
+import { stringifyUrl, parseUrl } from 'query-string';
 
 import { UrlBuilder } from '../url-builder';
 import { PagePathOptions } from './interfaces';
@@ -82,16 +82,45 @@ export class PagePath<TParams = { [key: string]: string | number }> {
     }
 
     public isActive(path: string): boolean;
-    public isActive<TParams>(params: TParams, path: string): boolean;
+    public isActive(path: string, params: Partial<TParams>): boolean;
     public isActive(p1: any, p2?: any): boolean {
         if (p2) {
-            return this.build(p1) === p2;
+            return this.isPathEqual(this.build(p2), p1);
         } else {
-            return this.fullRoot === p1;
+            return this.isRootEqual(this.fullRoot, p1);
         }
     }
 
     private get fullRoot() {
         return this.ending ? `${this.root}${this.ending}` : this.root;
+    }
+
+    private isPathEqual(path1: string, path2: string): boolean {
+        const pu1 = parseUrl((path1 || '').toLowerCase());
+        const pu2 = parseUrl((path2 || '').toLowerCase());
+
+        const keys1 = Object.keys(pu1.query);
+        const keys2 = Object.keys(pu2.query);
+
+        if (keys1.length === keys2.length) {
+            for (const key of keys1) {
+                if (pu1.query[key] !== pu2.query[key]) {
+                    return false;
+                }
+            }
+        }
+        else {
+            return false;
+        }
+
+        return this.isRootEqual(pu1.url, pu2.url) && pu1.fragmentIdentifier === pu2.fragmentIdentifier;
+    }
+
+    private isRootEqual(root1: string, root2: string): boolean {
+        return this.cleanRoot(root1).toLowerCase() === this.cleanRoot(root2).toLowerCase();
+    }
+
+    private cleanRoot(root: string): string {
+        return (root || '').replace(/^\//gi, '').replace(/\/$/gi, '');
     }
 }
