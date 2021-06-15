@@ -10,8 +10,7 @@ export class PagePath<TParams = { [key: string]: string | number }> {
     private readonly ending: string | undefined = undefined;
 
     constructor(options: string | PagePathOptions) {
-        const innerOptions: PagePathOptions =
-            typeof options === 'string' ? { root: options } : options;
+        const innerOptions: PagePathOptions = typeof options === 'string' ? { root: options } : options;
 
         const { root: innerRoot } = innerOptions;
 
@@ -68,10 +67,7 @@ export class PagePath<TParams = { [key: string]: string | number }> {
             }
 
             if (this.query.length) {
-                resultUrl = stringifyUrl(
-                    { url: resultUrl, query },
-                    { skipNull: true, skipEmptyString: true },
-                );
+                resultUrl = stringifyUrl({ url: resultUrl, query }, { skipNull: true, skipEmptyString: true });
             }
 
             // todo: check if has params to replace, if not - skip
@@ -108,8 +104,7 @@ export class PagePath<TParams = { [key: string]: string | number }> {
                     return false;
                 }
             }
-        }
-        else {
+        } else {
             return false;
         }
 

@@ -13,14 +13,9 @@ export class UrlBuilder {
         return url;
     }
 
-    private static buildParentheses<TParams>(
-        path: string,
-        params: TParams,
-    ): string {
+    private static buildParentheses<TParams>(path: string, params: TParams): string {
         let url = path;
-        const paramsArray = Object.entries(params || {}) as Array<
-            [keyof TParams, any]
-        >;
+        const paramsArray = Object.entries(params || {}) as Array<[keyof TParams, any]>;
         for (const [paramName, value] of paramsArray) {
             // For example, /:projectId\??/. JS eats one backslash while parsing literal.
             // const paramRegex = new RegExp(`\\[${paramName}\\](\\(.*?\\))?\\??`);
@@ -39,9 +34,7 @@ export class UrlBuilder {
 
     private static buildPoints<TParams>(path: string, params: TParams): string {
         let url = path;
-        const paramsArray = Object.entries(params || {}) as Array<
-            [keyof TParams, any]
-        >;
+        const paramsArray = Object.entries(params || {}) as Array<[keyof TParams, any]>;
         for (const [paramName, value] of paramsArray) {
             // For example, /:projectId\??/. JS eats one backslash while parsing literal.
             const paramRegex = new RegExp(`:${paramName}`);

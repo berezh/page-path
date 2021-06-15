@@ -21,7 +21,7 @@ describe('AppRoute: isActive', () => {
     test('params', () => {
         const route = new PagePath<BookPath>({
             root: '/book',
-            query: ['name', 'page']
+            query: ['name', 'page'],
         });
 
         expect(route.isActive('/book?name=alfabet', { name: 'alfabet' })).toBe(true);
@@ -30,7 +30,7 @@ describe('AppRoute: isActive', () => {
     test('params with /', () => {
         const route = new PagePath<BookPath>({
             root: '/book',
-            query: ['name', 'page']
+            query: ['name', 'page'],
         });
 
         expect(route.isActive('/book/?name=alfabet', { name: 'alfabet' })).toBe(true);

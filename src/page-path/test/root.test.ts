@@ -46,9 +46,7 @@ describe('AppRoute', () => {
             query: 'page',
             ending: '.html',
         });
-        expect(route.build({ name: 'alfabet', page: 10 })).toBe(
-            '/book/alfabet.html?page=10',
-        );
+        expect(route.build({ name: 'alfabet', page: 10 })).toBe('/book/alfabet.html?page=10');
     });
 
     test('book: isActive', () => {
