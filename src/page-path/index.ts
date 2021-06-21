@@ -30,11 +30,7 @@ export class PagePath<TParams = { [key: string]: string | number }> {
         }
 
         if (innerRoot) {
-            if (innerRoot.length > 1) {
-                this.root = innerRoot.replace(/\/$/gi, '');
-            } else {
-                this.root = innerRoot;
-            }
+            this.root = innerRoot;
         }
     }
 
