@@ -1,6 +1,6 @@
 # page-path
 
-Page path builder and container
+Page path builder
 
 <a href="https://www.npmjs.com/package/page-path">
     <img src="https://nodei.co/npm/page-path.png?mini=true"/>
@@ -12,7 +12,54 @@ Page path builder and container
 npm install page-path
 ```
 
-## Options
+## Usage
+
+1. Define path interface
+```tsx
+interface BookPath {
+    name: string;
+    page?: number;
+}
+```
+
+2. Create page path 
+
+```tsx
+const bookPagePath = new PagePath<BookPath>('/book', {
+    path: ['name'],
+    query: ['page'],
+});
+```
+
+3. Build path
+
+```tsx
+const path = bookPagePath.build({ name: 'alphabet', page: 7 });
+// path: "/book/alphabet?page=7"
+```
+
+#### constructor
+
+```tsx
+    // PagePath class
+    constructor(root: string, options: PagePathOptions);
+```
+
+Parameters:
+`root` - root path.
+
+`options`: path's options. See [PagePathOptions](#PagePathOptions)
+
+
+
+#### build(params: any): string
+
+Parameters:
+`params` - costom defined params values.
+
+Returns built URL based on passed parameters.
+
+
 
 ### PagePathOptions
 
@@ -20,56 +67,12 @@ npm install page-path
 
 | Name    | Required | Type                        | Description          | Example                 |
 | ------- | -------- | --------------------------- | -------------------- | ----------------------- |
-| `root`  | Yes      | `string`                    | Root path            | /**book**/alphabet?page=7 |
 | `path`  | No       | `string` or `Array<string>` | Subdirectories names | /book/**alphabet**?page=7 |
 | `query` | No       | `string` or `Array<string>` | Queries names        | /book/alphabet?**page**=7 |
+| `ending`  | No      | `string`                    | root path's ending. Use case example: `nextjs` static pages | /book**.html** |
 
-### PagePath
 
-#### build(params: any): string
 
-Parameters:
-`params` - URL's params passed to url builder.
-
-Returns built URL based on passed parameters.
-
-Example:
-
-```tsx
-// interface
-interface BookPath {
-    name: string;
-    page?: number;
-}
-
-// page path
-const bookPagePath = new PagePath<BookPath>({
-    root: '/book',
-    path: ['name'],
-    query: ['page'],
-});
-
-// build path
-const path = bookPagePath.build({ name: 'alphabet', page: 7 });
-// path: "/book/alphabet?page=7"
-```
-
-### root
-
-Returns `root` path.
-
-Example:
-
-```tsx
-// page path
-const bookPagePath = new PagePath({
-    root: '/book/:name',
-});
-
-// build path
-const root = bookPagePath.root;
-// path: "/book/:name"
-```
 
 ## Using in `react-router-dom`
 
@@ -101,17 +104,17 @@ import { Switch, Route } from 'react-router-dom';
 <Switch>
     <Route
         exact={true}
-        path={AppPaths.index.root}
+        path={AppPaths.index.routePath}
         component={IndexPage}
     />
     <Route
         exact={true}
-        path={AppPaths.contact.root}
+        path={AppPaths.contact.routePath}
         component={ContactPage}
     />
     <Route
         exact={true}
-        path={AppPaths.book.root}
+        path={AppPaths.book.routePath}
         component={BookPage}
     />
     ...
@@ -146,8 +149,7 @@ Define container
 import { PagePath } from 'page-path';
 
 export const AppPaths = {
-    book: new PagePath<BookPath>({
-        root: '/book/',
+    book: new PagePath<BookPath>('/book/', {
         path: ['name'],
         query: ['page'],
     }),

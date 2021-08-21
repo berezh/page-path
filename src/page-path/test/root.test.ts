@@ -62,6 +62,7 @@ describe('AppRoute', () => {
             root: '/book',
             ending: '.html',
         });
+
         expect(route.isActive('/book.html')).toBe(true);
         expect(route.isActive('/book')).toBe(false);
     });

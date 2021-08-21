@@ -1,7 +1,7 @@
 {
     "name": "page-path",
-    "version": "0.1.1",
-    "description": "Path builder",
+    "version": "0.2.0",
+    "description": "Page path builder",
     "main": "dist/index.js",
     "module": "dist/index.esm.js",
     "types": "dist/index.d.ts",
@@ -47,10 +47,11 @@
     "keywords": [
         "react",
         "page path",
+        "typescript",
         "router",
         "route",
         "path",
-        "path builder"
+        "parameter builder"
     ],
     "author": "Vadym Poberezhnyi",
     "license": "MIT",

@@ -9,8 +9,11 @@ export class PagePath<TParams = { [key: string]: string | number }> {
     private readonly query: string[] = [];
     private readonly ending: string | undefined = undefined;
 
-    constructor(options: string | PagePathOptions) {
-        const innerOptions: PagePathOptions = typeof options === 'string' ? { root: options } : options;
+    constructor(root: string);
+    constructor(options: PagePathOptions);
+    constructor(root: string, options: Omit<PagePathOptions, 'root'>);
+    constructor(p1: string | PagePathOptions, p2?: Omit<PagePathOptions, 'root'>) {
+        const innerOptions: PagePathOptions = typeof p1 === 'string' ? { root: p1, ...p2 } : p1;
 
         const { root: innerRoot } = innerOptions;
 
@@ -76,11 +79,16 @@ export class PagePath<TParams = { [key: string]: string | number }> {
     public isActive(path: string): boolean;
     public isActive(path: string, params: Partial<TParams>): boolean;
     public isActive(p1: any, p2?: any): boolean {
+        console.log(this.ending, this.fullRoot, p1);
         if (p2) {
             return this.isPathEqual(this.build(p2), p1);
         } else {
             return this.isRootEqual(this.fullRoot, p1);
         }
+    }
+
+    public get routerPath() {
+        return `${this.root}${this.path.length ? '/' : ''}${this.path.map((x) => `:${x}`).join('/')}`;
     }
 
     private get fullRoot() {
@@ -108,10 +116,10 @@ export class PagePath<TParams = { [key: string]: string | number }> {
     }
 
     private isRootEqual(root1: string, root2: string): boolean {
-        return this.cleanRoot(root1).toLowerCase() === this.cleanRoot(root2).toLowerCase();
+        return this.cleanRoot(root1) === this.cleanRoot(root2);
     }
 
     private cleanRoot(root: string): string {
-        return (root || '').replace(/^\//gi, '').replace(/\/$/gi, '');
+        return (root || '').replace(/^\//gi, '').replace(/\/$/gi, '').toLowerCase();
     }
 }
