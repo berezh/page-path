@@ -79,7 +79,6 @@ export class PagePath<TParams = { [key: string]: string | number }> {
     public isActive(path: string): boolean;
     public isActive(path: string, params: Partial<TParams>): boolean;
     public isActive(p1: any, p2?: any): boolean {
-        console.log(this.ending, this.fullRoot, p1);
         if (p2) {
             return this.isPathEqual(this.build(p2), p1);
         } else {
