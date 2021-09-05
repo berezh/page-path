@@ -90,6 +90,10 @@ export class PagePath<TParams = { [key: string]: string | number }> {
         return `${this.root}${this.path.length ? '/' : ''}${this.path.map((x) => `:${x}`).join('/')}`;
     }
 
+    public get nextJsPath() {
+        return `${this.root}${this.path.length ? '/' : ''}${this.path.map((x) => `[${x}]`).join('/')}`;
+    }
+
     private get fullRoot() {
         return this.ending ? `${this.root}${this.ending}` : this.root;
     }
