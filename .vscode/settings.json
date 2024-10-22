@@ -1,15 +1,9 @@
-{
-    "jestrunner.configPath": "jest.config.js",
+{ 
+    "editor.tabSize": 2,
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    "editor.trimAutoWhitespace": true,
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
+    "eslint.format.enable": true,
+    "editor.codeActionsOnSave": {      
         "source.fixAll.eslint": "always"
     },
-    "eslint.validate": [
-        "typescript",
-        "typescriptreact"
-    ],
-    "eslint.run": "onSave",
-    "eslint.nodePath": "./node_modules"
+    "eslint.validate": ["typescript", "typescriptreact", "javascript", "javascriptreact", "markdown", "json"]
 }

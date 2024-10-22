@@ -1,18 +1,17 @@
 {
     "compilerOptions": {
-        "declaration": true,
-        "declarationDir": "./dist",
-        "strict": true,
-        "allowSyntheticDefaultImports": true,
-        "sourceMap": true,
-        "noUnusedParameters": true,
-        "strictNullChecks": true,
-        "moduleResolution": "node",
-        "noImplicitAny": true,
-        "outDir": "./dist",
         "target": "es5",
-        "jsx": "react"
+        "module": "esnext",
+        "declaration": true,
+        "outDir": "./dist",
+        "strict": true,
+        "lib": ["es2015", "es2016", "dom"],
+        "jsx": "react",
+        "esModuleInterop": true,
+        "noImplicitAny": false,
+        "experimentalDecorators": true,
+        "moduleResolution": "NodeNext"
     },
-    "include": ["src/**/*", "src/page-path/test/.ts"],
+    "include": ["src"],
     "exclude": ["node_modules"]
 }
