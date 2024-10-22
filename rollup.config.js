@@ -1,25 +1,18 @@
-import typescript from "rollup-plugin-typescript2";
-import scss from "rollup-plugin-scss";
-import { uglify } from "rollup-plugin-uglify";
+import { obfuscator } from "rollup-obfuscator";
+import typescript from "@rollup/plugin-typescript";
 
 import pkg from "./package.json";
 
-const plugins = [
-  typescript({
-    typescript: require("typescript"),
-  }),
-  scss({
-    output: false,
-  }),
-];
+const plugins = [typescript()];
 
-if (process.env.BUILD === "production") {
-  plugins.push(
-    uglify({
-      nameCache: {},
-    })
-  );
+if (process.env.BUILD !== "dev") {
+  plugins.push(obfuscator());
 }
+
+const output = [
+  { file: pkg.main, format: "cjs" },
+  { file: pkg.module, format: "esm" },
+];
 
 export default [
   {
@@ -27,9 +20,6 @@ export default [
     dest: "index.js",
     external: Object.keys(pkg.peerDependencies || {}),
     plugins,
-    output: [
-      { file: pkg.main, format: "cjs" },
-      { file: pkg.module, format: "esm" },
-    ],
+    output,
   },
 ];
