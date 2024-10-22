@@ -13,6 +13,6 @@
         "target": "es5",
         "jsx": "react"
     },
-    "include": ["src/**/*"],
+    "include": ["src/**/*", "src/page-path/test/.ts"],
     "exclude": ["node_modules"]
 }

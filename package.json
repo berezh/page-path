@@ -1,6 +1,6 @@
 {
     "name": "page-path",
-    "version": "0.2.1",
+    "version": "0.4.0",
     "description": "Page path builder",
     "main": "dist/index.js",
     "module": "dist/index.esm.js",
@@ -26,7 +26,9 @@
         "start": "npm run build-watch",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
-        "test": "jest --config jest.config.js --maxWorkers=1"
+        "test": "jest --config jest.config.js --maxWorkers=1",
+        "v": "npm --no-git-tag-version version minor",
+        "p": "npm run v && npm run lint:fix && git add * && git commit -m\"v\" && git push origin master"
     },
     "repository": {
         "type": "git",

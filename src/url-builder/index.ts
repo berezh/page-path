@@ -19,7 +19,7 @@ export class UrlBuilder {
     for (const [paramName, value] of paramsArray) {
       // For example, /:projectId\??/. JS eats one backslash while parsing literal.
       // const paramRegex = new RegExp(`\\[${paramName}\\](\\(.*?\\))?\\??`);
-      const paramRegex = new RegExp(`\\[${paramName}\\]`);
+      const paramRegex = new RegExp(`\\[${paramName as any}\\]`);
       if (paramRegex.test(path)) {
         url = url.replace(paramRegex, UrlBuilder.getValue(value));
       } else {
@@ -37,7 +37,7 @@ export class UrlBuilder {
     const paramsArray = Object.entries(params || {}) as Array<[keyof TParams, any]>;
     for (const [paramName, value] of paramsArray) {
       // For example, /:projectId\??/. JS eats one backslash while parsing literal.
-      const paramRegex = new RegExp(`:${paramName}`);
+      const paramRegex = new RegExp(`:${paramName as any}`);
       if (paramRegex.test(path)) {
         url = url.replace(paramRegex, value === undefined ? "" : value);
       } else {

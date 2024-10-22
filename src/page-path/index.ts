@@ -87,10 +87,11 @@ export class PagePath<TParams = { [key: string]: string | number }> {
   public isActive(path: string, params: Partial<TParams>): boolean;
 
   public isActive(p1: any, p2?: any): boolean {
+    const path = this.cleanHash(p1);
     if (p2) {
-      return this.isPathEqual(this.build(p2), p1);
+      return this.isPathEqual(this.build(p2), path);
     } else {
-      return this.isRootEqual(this.fullRoot, p1);
+      return this.isRootEqual(this.fullRoot, path);
     }
   }
 
@@ -100,6 +101,15 @@ export class PagePath<TParams = { [key: string]: string | number }> {
 
   public get nextJsPath() {
     return `${this.root}${this.path.length ? "/" : ""}${this.path.map(x => `[${x}]`).join("/")}`;
+  }
+
+  public cleanHash(path: string) {
+    if (/#/.test(path)) {
+      const splits = path.split("#");
+      return splits[0];
+    }
+
+    return path;
   }
 
   private get fullRoot() {
