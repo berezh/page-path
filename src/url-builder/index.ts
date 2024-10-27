@@ -46,7 +46,7 @@ export class UrlBuilder {
     }
 
     // replace empty
-    url = url.replace(new RegExp(`:[a-z0-9]+(\\?)?`, "gi"), "");
+    url = url.replace(new RegExp(`:[a-z][a-z0-9]+(\\?)?`, "gi"), "");
 
     return url;
   }
