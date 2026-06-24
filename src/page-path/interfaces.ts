@@ -5,3 +5,8 @@ export interface PagePathOptions {
   /// Path ending
   ending?: string;
 }
+
+export interface PagePathBuildOptions {
+  addQuery?: { [key: string]: string | number } | string;
+  removeQueryKey?: string | string[];
+}

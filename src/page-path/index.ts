@@ -1,7 +1,7 @@
-import { stringifyUrl, parseUrl } from "query-string";
+import qs from "query-string";
 
 import { UrlBuilder } from "../url-builder";
-import { PagePathOptions } from "./interfaces";
+import { PagePathOptions, PagePathBuildOptions } from "./interfaces";
 
 export class PagePath<TParams = { [key: string]: string | number }> {
   private readonly root: string = "";
@@ -43,13 +43,68 @@ export class PagePath<TParams = { [key: string]: string | number }> {
     }
   }
 
-  public build(params?: TParams): string {
-    let resultUrl = `${this.root}`;
+  private extractQuery(param?: { [key: string]: string | number } | string) {
+    let result: { [key: string]: string | number | undefined } = {};
+
+    if (param) {
+      if (typeof param === "object") {
+        result = { ...param };
+      } else if (typeof param === "string") {
+        const { query } = qs.parseUrl(param);
+        for (const queryKey in query) {
+          result[queryKey] = query[queryKey]?.toString();
+        }
+      }
+    }
+
+    return result;
+  }
+
+  private applyOptions(queryIn: { [key: string]: string | number | undefined }, options?: PagePathBuildOptions) {
+    const { addQuery, removeQueryKey } = options || {};
+
+    const query = { ...queryIn, ...this.extractQuery(addQuery) };
+
+    if (removeQueryKey) {
+      const removeKeys = typeof removeQueryKey === "string" ? [removeQueryKey] : removeQueryKey;
+      for (const key of removeKeys) {
+        delete query[key];
+      }
+    }
+
+    return query;
+  }
+
+  public build(params?: TParams, options?: PagePathBuildOptions): string {
+    let resultUrl = this.buildPathParam(params);
+
+    if (this.ending) {
+      resultUrl = `${resultUrl}${this.ending}`;
+    }
 
     if (params) {
-      for (let i = 0; i < this.path.length; i++) {
-        const pathKey = this.path[i];
-        const pathValue = (params as any)[pathKey];
+      let query: { [key: string]: string | number | undefined } = {};
+      if (this.query.length) {
+        for (const queryKey of this.query) {
+          query[queryKey] = params[queryKey];
+        }
+      }
+
+      query = this.applyOptions(query, options);
+
+      resultUrl = qs.stringifyUrl({ url: resultUrl, query }, { skipNull: true, skipEmptyString: true });
+
+      return UrlBuilder.build(resultUrl, params);
+    }
+
+    return resultUrl;
+  }
+
+  private buildPathParam(params?: TParams): string {
+    let resultUrl = `${this.root}`;
+    if (params) {
+      for (const pathKey of this.path) {
+        const pathValue = params[pathKey];
         if (pathValue) {
           resultUrl += `/${pathValue}`;
         } else {
@@ -57,59 +112,44 @@ export class PagePath<TParams = { [key: string]: string | number }> {
         }
       }
     }
-
-    if (this.ending) {
-      resultUrl = `${resultUrl}${this.ending}`;
-    }
-
-    if (params) {
-      const query: { [key: string]: string } = {};
-      if (this.query.length) {
-        for (let i = 0; i < this.query.length; i++) {
-          const queryKey = this.query[i];
-          query[queryKey] = (params as any)[queryKey];
-        }
-      }
-
-      if (this.query.length) {
-        resultUrl = stringifyUrl({ url: resultUrl, query }, { skipNull: true, skipEmptyString: true });
-      }
-
-      // todo: check if has params to replace, if not - skip
-      return UrlBuilder.build(resultUrl, params);
-    }
-
     return resultUrl;
   }
 
-  public isActive(path: string): boolean;
+  public isActive(path: string | Partial<TParams>): boolean;
 
   public isActive(path: string, params: Partial<TParams>): boolean;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public isActive(p1: any, p2?: any): boolean {
-    const path = this.cleanHash(p1);
     if (p2) {
-      return this.isPathEqual(this.build(p2), path);
+      return this.isPathEqual(this.build(p2), p1);
+    } else if (typeof p1 === "string") {
+      return this.isRootEqual(this.fullRoot, p1);
     } else {
-      return this.isRootEqual(this.fullRoot, path);
+      return this.isPathEqual(this.build(p1), this.fullRoot);
     }
+  }
+
+  public isRootPathActive(path: string) {
+    const rootPath1 = this.cleanRoot(this.root);
+    const rootPath2 = this.cleanRoot(path);
+
+    const index = rootPath2.indexOf(rootPath1);
+    return index === 0;
   }
 
   public get routerPath() {
-    return `${this.root}${this.path.length ? "/" : ""}${this.path.map(x => `:${x}`).join("/")}`;
+    const pathes = this.path.map(x => `:${x}`).join("/");
+    return `${this.root}${this.path.length ? "/" : ""}${pathes}`;
   }
 
   public get nextJsPath() {
-    return `${this.root}${this.path.length ? "/" : ""}${this.path.map(x => `[${x}]`).join("/")}`;
+    const pathes = this.path.map(x => `[${x}]`).join("/");
+    return `${this.root}${this.path.length ? "/" : ""}${pathes}`;
   }
 
-  public cleanHash(path: string) {
-    if (/#/.test(path)) {
-      const splits = path.split("#");
-      return splits[0];
-    }
-
-    return path;
+  public get url() {
+    return this.fullRoot;
   }
 
   private get fullRoot() {
@@ -117,8 +157,8 @@ export class PagePath<TParams = { [key: string]: string | number }> {
   }
 
   private isPathEqual(path1: string, path2: string): boolean {
-    const pu1 = parseUrl((path1 || "").toLowerCase());
-    const pu2 = parseUrl((path2 || "").toLowerCase());
+    const pu1 = qs.parseUrl((path1 || "").toLowerCase());
+    const pu2 = qs.parseUrl((path2 || "").toLowerCase());
 
     const keys1 = Object.keys(pu1.query);
     const keys2 = Object.keys(pu2.query);
