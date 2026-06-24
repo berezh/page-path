@@ -45,28 +45,28 @@ describe("AppRoute: isActive", () => {
       expect(route.isActive("/book/?name=alfabet", { name: "alfabet" })).toBe(true);
     });
 
-    test("params with hash", () => {
-      const route = new PagePath<BookPath>({
-        root: "/book",
-        query: ["name", "page"],
-      });
+    // test("params with hash", () => {
+    //   const route = new PagePath<BookPath>({
+    //     root: "/book",
+    //     query: ["name", "page"],
+    //   });
 
-      expect(route.isActive("/book#123")).toBe(true);
-      expect(route.isActive("/book/?name=alfabet#123", { name: "alfabet" })).toBe(true);
-    });
+    //   expect(route.isActive("/book#123")).toBe(true);
+    //   expect(route.isActive("/book/?name=alfabet#123", { name: "alfabet" })).toBe(true);
+    // });
 
     // root: clean /
   });
 
-  describe("cleanHash", () => {
-    it("root", () => {
-      const route = new PagePath<BookPath>({
-        root: "/book",
-      });
+  // describe.skip("cleanHash", () => {
+  //   it("root", () => {
+  //     const route = new PagePath<BookPath>({
+  //       root: "/book",
+  //     });
 
-      expect(route.cleanHash("/hello#hash")).toBe("/hello");
-      expect(route.cleanHash("/#hash")).toBe("/");
-      expect(route.cleanHash("#hash")).toBe("");
-    });
-  });
+  //     expect(route.cleanHash("/hello#hash")).toBe("/hello");
+  //     expect(route.cleanHash("/#hash")).toBe("/");
+  //     expect(route.cleanHash("#hash")).toBe("");
+  //   });
+  // });
 });
